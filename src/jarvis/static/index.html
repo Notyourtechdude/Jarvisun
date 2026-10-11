@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Jarvis — your private workspace</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to workspace</a>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <a class="brand" href="/" aria-label="Jarvis home"><span class="brand-mark" aria-hidden="true">J</span><span>jarvis<span class="brand-caption">PRIVATE WORKSPACE</span></span></a>
+      <nav aria-label="Sections">
+        <button class="nav-button selected" type="button" data-view="conversation" aria-pressed="true"><span aria-hidden="true">◌</span> Conversation</button>
+        <button class="nav-button" type="button" data-view="vault" aria-pressed="false"><span aria-hidden="true">▧</span> Knowledge vault</button>
+        <button class="nav-button" type="button" data-view="workspace" aria-pressed="false"><span aria-hidden="true">⌘</span> Workspace tools</button>
+        <button class="nav-button" type="button" data-view="activity" aria-pressed="false"><span aria-hidden="true">≡</span> Activity</button>
+      </nav>
+      <section class="focus-card" aria-labelledby="focus-heading">
+        <p class="eyebrow">ONE THING AT A TIME</p>
+        <h2 id="focus-heading">Make a little progress.</h2>
+        <p class="muted" id="focus-description">Choose one small action. Give it a few quiet minutes.</p>
+        <form id="focus-form">
+          <label for="focus-task">Your next action</label>
+          <input id="focus-task" placeholder="e.g. Open the project brief" maxlength="500" required>
+          <div class="focus-start"><div><label for="focus-minutes">Minutes</label><input id="focus-minutes" type="number" min="1" max="180" value="15" required></div><button class="primary" type="submit" data-auth>Start focus</button></div>
+        </form>
+        <div id="focus-session" hidden><p id="focus-next-action" class="focus-task"></p><p id="focus-clock" class="focus-clock" aria-live="off"></p><p id="focus-state" class="muted"></p><div class="button-row"><button id="focus-toggle" type="button" data-auth>Pause</button><button id="focus-complete" type="button" data-auth>Done for now</button></div></div>
+        <p id="focus-progress" class="small muted" aria-live="polite">Connect to see today's progress.</p>
+      </section>
+      <p class="sidebar-note">On your machine.<br>At your pace.</p>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><span class="topbar-label">OWNER SPACE <span class="separator">/</span> <span id="current-section">Conversation</span></span><div class="connection"><span id="connection-state" class="status-label">Disconnected</span><button id="disconnect" class="quiet" type="button" hidden>Disconnect</button></div></header>
+      <main id="main" tabindex="-1">
+        <div id="notice" class="notice" role="alert" hidden></div>
+        <section id="connection-panel" class="connection-panel" aria-labelledby="connect-heading">
+          <div><p class="eyebrow">YOUR PRIVATE ASSISTANT</p><h1 id="connect-heading">A clear space to think.<br> A steady way to act.</h1><p class="muted intro">Connect to your local Jarvis service to work with your notes, take a next step, and see what happened.</p></div>
+          <form id="connect-form"><label for="token">Owner access token</label><div class="connect-input"><input id="token" type="password" autocomplete="off" spellcheck="false" required placeholder="Paste your access token"><button type="submit" class="primary">Connect</button></div><p class="small muted">The token stays in this page's memory. Closing or reloading the page disconnects you.</p></form>
+        </section>
+        <div id="connected-overview" class="overview" hidden><span id="model-status"></span><span id="vault-status"></span><button id="refresh-status" class="quiet" type="button" data-auth>Refresh status</button></div>
+        <section id="view-conversation" class="view" aria-labelledby="conversation-heading">
+          <div class="section-heading"><div><p class="eyebrow">THINK • FIND • DO</p><h2 id="conversation-heading">What's on your mind?</h2></div><button id="clear-chat" class="quiet" type="button">Clear conversation</button></div>
+          <div id="chat-log" class="chat-log" role="log" aria-live="polite" aria-relevant="additions"><div id="chat-empty" class="empty-state"><span class="empty-symbol"><svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M6 5h13v13" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span><h3>Start where you are.</h3><p>Ask about a document, work through a question,<br>or turn a task into one small next step.</p><div class="suggestions"><button type="button" data-prompt="Help me start">Find a next step</button><button type="button" data-prompt="/find ">Find in my notes</button><button type="button" data-prompt="/calc ">Calculate something</button></div></div></div>
+          <details id="voice-controls" class="optional-panel"><summary>Voice <span id="voice-summary" class="small muted">· optional</span></summary><p id="voice-state" class="small muted" role="status">Connect to check local voice engines.</p><form id="voice-form" class="voice-form"><div><label for="voice-file">WAV recording · 16 kHz, mono, 16-bit PCM, up to 30 seconds</label><input id="voice-file" type="file" accept=".wav,audio/wav,audio/x-wav" required disabled></div><button type="submit" data-auth>Send recording</button></form><p class="small muted">Audio is sent to your local service. Text chat always works.</p></details>
+          <form id="chat-form" class="composer"><label class="sr-only" for="message">Message Jarvis</label><textarea id="message" rows="3" maxlength="6000" placeholder="Ask a question or describe what you need…" required></textarea><div class="composer-footer"><span class="small muted" id="chat-hint">Connect to begin. Sources and verification appear with each answer.</span><button class="primary" type="submit" data-auth>Send <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M6 5h13v13" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div></form>
+        </section>
+        <section id="view-vault" class="view" aria-labelledby="vault-heading" hidden>
+          <div class="section-heading"><div><p class="eyebrow">KNOWLEDGE, WITH SOURCES</p><h2 id="vault-heading">Your knowledge vault</h2></div><button id="index-vault" type="button" data-auth>Update index</button></div>
+          <p class="muted" id="vault-roots">Connect to view configured folders.</p><form id="vault-form" class="search-form"><label class="sr-only" for="vault-query">Search your vault</label><input id="vault-query" type="search" required maxlength="500" placeholder="Search your documents…"><button class="primary" type="submit" data-auth>Search</button></form>
+          <p id="vault-feedback" class="small muted" role="status">Only configured folders are indexed.</p><div id="vault-results" class="results"><p class="empty-copy">Search to see matching passages and their exact sources.</p></div>
+          <div class="section-heading graph-heading"><div><h3>Source connections</h3><p class="small muted">Relationships come from indexed evidence.</p></div><button id="load-graph" type="button" data-auth>Load graph</button></div><div id="vault-graph" class="graph"><p class="empty-copy">Load the graph after indexing your documents.</p></div><ul id="graph-sources" class="graph-sources" aria-label="Graph sources"></ul>
+        </section>
+        <section id="view-workspace" class="view" aria-labelledby="workspace-heading" hidden>
+          <div class="section-heading"><div><p class="eyebrow">SCOPED ACTIONS</p><h2 id="workspace-heading">Workspace tools</h2></div></div><p class="muted" id="workspace-path">Connect to view your workspace.</p>
+          <div class="tools-layout"><form id="tool-form"><label for="tool-name">Tool</label><select id="tool-name"><option value="">Choose an available tool</option></select><p id="tool-description" class="small muted">Available tools appear after connecting.</p><label for="tool-arguments">Arguments (JSON)</label><textarea id="tool-arguments" rows="9" spellcheck="false" placeholder='{"path": "notes.md"}' required>{}</textarea><p class="small muted">Paths must stay within the configured workspace. Results include a durable receipt.</p><button class="primary" type="submit" data-auth>Run tool</button></form><div class="tool-result"><h3>Result &amp; receipt</h3><pre id="tool-output" tabindex="0">Run a tool to see its result.</pre></div></div>
+          <details id="workflow-controls" class="optional-panel"><summary>Recurring workflows</summary><p class="small muted">Schedule the selected tool and its current arguments. The first run can begin immediately. Runs follow your service's standing policy while the host is awake and the service is running.</p><p id="workflow-tool" class="small">Choose a workspace tool above to schedule it.</p><form id="workflow-form" class="workflow-form"><div><label for="workflow-name">Workflow name</label><input id="workflow-name" required maxlength="100" placeholder="e.g. Weekly sales snapshot"></div><div><label for="workflow-interval">Every (seconds)</label><input id="workflow-interval" type="number" min="60" max="2592000" value="3600" required></div><button type="submit" class="primary" data-auth>Schedule tool</button></form><div class="workflow-heading"><h3>Scheduled workflows</h3><button id="refresh-workflows" type="button" data-auth>Refresh workflows</button></div><p id="workflow-feedback" class="small muted" role="status">Refresh to see the service's scheduled workflows.</p><div id="workflows" class="workflow-list"></div></details>
+          <h3 class="capabilities-heading">Capability availability</h3><dl id="capabilities" class="capabilities"><div><dt>Service</dt><dd>Disconnected</dd></div></dl><details id="service-notes" class="sources" hidden><summary>Service notes</summary><ul id="service-warnings"></ul></details>
+        </section>
+        <section id="view-activity" class="view" aria-labelledby="activity-heading" hidden>
+          <div class="section-heading"><div><p class="eyebrow">A RECORD YOU CAN CHECK</p><h2 id="activity-heading">Activity &amp; receipts</h2></div><button id="refresh-activity" type="button" data-auth>Refresh activity</button></div><p class="muted">Jobs show execution state. Audit events record the service's actions.</p><h3>Jobs</h3><div id="jobs" class="activity-list"><p class="empty-copy">Connect and refresh to view jobs.</p></div><h3 class="audit-heading">Audit trail</h3><div id="audit" class="activity-list"><p class="empty-copy">Connect and refresh to view audit events.</p></div>
+        </section>
+        <footer class="page-footer"><span>JARVIS <span id="version"></span></span><span>Private by design. Evidence where it matters.</span></footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

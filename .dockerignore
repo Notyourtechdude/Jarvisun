@@ -1,0 +1,11 @@
+.git
+.venv
+.jarvis
+.env
+__pycache__
+*.egg-info
+dist
+build
+tests
+test-results
+playwright-report
